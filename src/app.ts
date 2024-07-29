@@ -9,18 +9,12 @@ import routes from './routes/v1';
 import { errorConverter, errorHandler } from './middlewares/error';
 import ApiError from './utils/ApiError';
 import helmet from 'helmet';
-import { sanitize } from 'sanitizer';
+
 import mongoSanitize from 'express-mongo-sanitize';
 import compression from 'compression';
 import cors from 'cors';
 
 const app = express();
-const sanitizeMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (req.body) {
-        req.body = sanitize(req.body);
-    }
-    next();
-};
 
 if (config.env !== 'test') {
     app.use(morgan.successHandler);
@@ -28,15 +22,11 @@ if (config.env !== 'test') {
 }
 
 app.use(helmet());
-
-// parse json request body
 app.use(express.json());
-
-// parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));
 
 // sanitize request data
-app.use(sanitizeMiddleware);
+
 app.use(mongoSanitize());
 
 // gzip compression

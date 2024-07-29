@@ -54,19 +54,23 @@ const userSchema = new mongoose.Schema<IUser>(
     }
 );
 
+// Wtyczki
 userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
 
+// Statyczne metody
 userSchema.statics.isEmailTaken = async function (email: string, excludeUserId?: string): Promise<boolean> {
     const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
     return !!user;
 };
 
+// Metody instancji
 userSchema.methods.isPasswordMatch = async function (password: string): Promise<boolean> {
     const user = this as IUser;
     return bcrypt.compare(password, user.password);
 };
 
+// Hak przed zapisem
 userSchema.pre('save', async function (next) {
     const user = this as IUser;
     if (user.isModified('password')) {
@@ -75,6 +79,7 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
+// Model użytkownika
 const User = mongoose.model<IUser, IUserModel>('User', userSchema);
 
 export default User;

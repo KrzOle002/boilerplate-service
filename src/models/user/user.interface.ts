@@ -1,4 +1,5 @@
 import { Document, Model } from 'mongoose';
+import { Filter, Option } from '../../types/filterType';
 
 export interface IUser extends Document {
     name: string;
@@ -6,11 +7,10 @@ export interface IUser extends Document {
     password: string;
     role: string;
     isEmailVerified: boolean;
-
-    // Define methods on the User model
     isPasswordMatch(password: string): Promise<boolean>;
 }
 
 export interface IUserModel extends Model<IUser> {
-    isEmailTaken(email: string, excludeUserId?: string): Promise<boolean>;
+    paginate(filter: Filter, options: Option): unknown;
+    isEmailTaken(email: string, excludeUserId?: number): Promise<boolean>;
 }
