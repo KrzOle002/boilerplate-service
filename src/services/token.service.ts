@@ -1,13 +1,12 @@
-import { Moment } from 'moment';
 import { ObjectId } from 'mongoose';
-import { User } from '../models';
+import { User, Token } from '../models';
 import { IUser } from '../models/user/user.interface';
 import jwt from 'jsonwebtoken';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import httpStatus from 'http-status';
 import config from '../config/config';
 import userService from './user.service';
-import { Token } from '../models';
+
 import ApiError from '../utils/ApiError';
 import tokenTypes from '../config/token';
 

@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import ApiError from '../utils/ApiError';
 import { IUser } from '../models/user/user.interface';
-import { Filter, Option } from '../types/filterType';
+
 import User from '../models/user/user.model';
 
 const createUser = async (userBody: IUser) => {
@@ -25,7 +25,7 @@ const getUserByEmail = async (email: string) => {
     return User.findOne({ email });
 };
 
-const updateUserById = async (userId: string, updateBody: IUser) => {
+const updateUserById = async (userId: string, updateBody: Partial<IUser>) => {
     const user = await getUserById(userId);
     if (!user) {
         throw new ApiError(httpStatus.NOT_FOUND, 'User not found');

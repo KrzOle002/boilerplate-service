@@ -1,9 +1,9 @@
-const httpStatus = require('http-status');
-const tokenService = require('./token.service');
-const userService = require('./user.service');
-const Token = require('../models/token/token.model');
-const ApiError = require('../utils/ApiError');
-const { tokenTypes } = require('../config/token');
+import httpStatus from 'http-status';
+import tokenService from './token.service';
+import userService from '../services/user.service';
+import Token from '../models/token/token.model';
+import ApiError from '../utils/ApiError';
+import tokenTypes from '../config/token';
 
 /**
  * Login with username and password
@@ -29,7 +29,7 @@ const logout = async (refreshToken: string) => {
     if (!refreshTokenDoc) {
         throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
     }
-    await refreshTokenDoc.remove();
+    await Token.deleteOne({ _id: refreshTokenDoc._id });
 };
 
 /**
@@ -44,7 +44,7 @@ const refreshAuth = async (refreshToken: string) => {
         if (!user) {
             throw new Error();
         }
-        await refreshTokenDoc.remove();
+        await Token.deleteOne({ _id: refreshTokenDoc._id });
         return tokenService.generateAuthTokens(user);
     } catch (error) {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate');
